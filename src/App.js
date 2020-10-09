@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Auth from './screens/Auth';
 import deviceStorage from './services/deviceStorage';
 import LoggedIn from './screens/LoggedIn';
+
+const Stack = createStackNavigator();
 
 export default class App extends Component {
   constructor() {
@@ -23,14 +28,19 @@ export default class App extends Component {
   }
 
   render() {
-    if (!this.state.jwt) {
-      return (
-        <Auth newToken={this.newToken}/>
-      );
-    } else if (this.state.jwt) {
-      return (
-        <LoggedIn logout={this.deleteJWT} />
-      )
+    if (this.state.jwt) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="LoggedIn"
+            component={LoggedIn}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+    } else {
+      return <Auth newToken={this.newToken} />
     }
   }
 }

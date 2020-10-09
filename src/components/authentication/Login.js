@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { Input, TextLink, Button, Loading } from '../shared';
-import deviceStorage from '../services/deviceStorage';
+import React, { Component, Fragment } from 'react';
+import { Text, View } from 'react-native';
+import { Input, TextLink, Loading, Button } from '../../shared';
+import deviceStorage from '../../services/deviceStorage';
 import axios from 'axios';
 
-class Registration extends Component {
+class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -14,21 +14,13 @@ class Registration extends Component {
       loading: false
     };
 
-    this.createUser = this.createUser.bind(this);
+    this.login = this.login.bind(this);
   }
 
-
-  createUser() {
-    this.setState({ error: '', loading: true });
+  login() {
     const { email, password } = this.state;
-    const params = {
-      user: {
-        email: email,
-        password: password
-      }
-    }
-
-    axios.post('http://localhost:3000/api/users', params )
+    this.setState({ error: '', loading: true });
+    axios.post('http://localhost:3000/api/sessions', { email: email, password: password})
       .then(
         response => {
           deviceStorage.saveJWT(response.data.token);
@@ -37,17 +29,18 @@ class Registration extends Component {
         error => {
           this.setState({
             loading: false,
-            error: 'Something went wrong'
+            error: 'Invalid email or password'
           })
         }
       );
-
   }
+
   render() {
-    const { email, password, password_confirmation, error, loading } = this.state;
+    const { email, password, error, loading } = this.state;
     const { form, section, errorTextStyle } = styles;
 
     return (
+      <Fragment>
         <View style={form}>
           <View style={section}>
             <Input
@@ -67,22 +60,26 @@ class Registration extends Component {
               onChangeText={password => this.setState({ password })}
             />
           </View>
+
           <Text style={errorTextStyle}>
             {error}
           </Text>
-           {!loading ?
-            <Button onPress={this.createUser}>
-              Register
+
+          {!loading ?
+            <Button onPress={this.login}>
+              Login
             </Button>
             :
             <Loading size={'large'} />}
-          <Button onPress={this.props.authSwitch}>Login</Button>
+
         </View>
+        <TextLink onPress={this.props.authSwitch}>
+          Don't have an account? Register!
+        </TextLink>
+      </Fragment>
     );
   }
 }
-
-export { Registration };
 
 const styles = {
   form: {
@@ -102,3 +99,5 @@ const styles = {
     color: 'red'
   }
 };
+
+export { Login };

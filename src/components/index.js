@@ -1,2 +1,2 @@
-export * from './Registration';
-export * from './Login';
+export * from './authentication/Registration';
+export * from './authentication/Login';
