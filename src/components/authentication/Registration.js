@@ -10,7 +10,6 @@ class Registration extends Component {
     this.state = {
       email: '',
       password: '',
-      error: '',
       loading: false
     };
 
@@ -19,7 +18,7 @@ class Registration extends Component {
 
 
   createUser() {
-    this.setState({ error: '', loading: true });
+    this.setState({ loading: true });
     const { email, password } = this.state;
     const params = {
       user: {
@@ -28,23 +27,15 @@ class Registration extends Component {
       }
     }
 
-    axios.post('http://localhost:3000/api/users', params )
-      .then(
-        response => {
-          deviceStorage.saveJWT(response.data.token);
-          this.props.newToken(response.data.token);
-        },
-        error => {
-          this.setState({
-            loading: false,
-            error: 'Something went wrong'
-          })
-        }
-      );
+    this.props.createUser(params).then(() => {
+        this.setState({
+          loading: false
+        })
+    });
 
   }
   render() {
-    const { email, password, password_confirmation, error, loading } = this.state;
+    const { email, password, password_confirmation, loading } = this.state;
     const { form, section, errorTextStyle } = styles;
 
     return (
@@ -68,7 +59,7 @@ class Registration extends Component {
             />
           </View>
           <Text style={errorTextStyle}>
-            {error}
+            {this.props.authError}
           </Text>
            {!loading ?
             <Button onPress={this.createUser}>

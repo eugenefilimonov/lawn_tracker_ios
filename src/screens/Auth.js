@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Text, View } from 'react-native';
 import { Login, Registration } from '../components';
-import { userLogin } from '../store/modules/application';
+import { userLogin, createUser } from '../store/modules/application';
 
 class Auth extends Component {
   constructor(props){
@@ -24,7 +24,7 @@ class Auth extends Component {
   whichForm() {
     if(!this.state.showLogin){
       return(
-        <Registration newToken={this.props.newToken} authSwitch={this.authSwitch}/>
+        <Registration createUser={this.props.createUser} authError={this.props.authError} authSwitch={this.authSwitch}/>
       );
     } else {
       return(
@@ -55,7 +55,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  userLogin
+  userLogin,
+  createUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

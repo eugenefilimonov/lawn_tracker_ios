@@ -20,6 +20,20 @@ export const userLogout = () => dispatch => {
     }
   )
 }
+export const createUser = (params) => {
+  return (dispatch)=> {
+    return axios.post('http://localhost:3000/api/users', params)
+      .then(
+        response => {
+          deviceStorage.saveJWT(response.data.token)
+          dispatch({ type: USER_VERIFIED, jwt: response.data.token, loading: false })
+        },
+        error => {
+          dispatch({ type: AUTH_ERROR, authError: 'Something went wrong'})
+        }
+      );
+  }
+}
 
 export const userLogin = (email, password) => {
   return (dispatch)=> {
