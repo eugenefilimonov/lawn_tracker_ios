@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { View, Button, Text } from 'react-native';
 import { fetchProperty } from '../store/modules/property';
 import { userLogout } from '../store/modules/application';
@@ -14,10 +15,10 @@ function HomeScreen() {
   );
 }
 
-function SettingsScreen() {
+function SettingsScreen(props) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
+      <Button title='Logout' onPress={props.userLogout} />
     </View>
   );
 }
@@ -37,8 +38,27 @@ class LoggedIn extends Component {
 
     return (
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          options={{
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="cog" color={color} size={size} />
+            ),
+          }}
+        >
+          {() => <SettingsScreen userLogout={this.props.userLogout}/>}
+        </Tab.Screen>
       </Tab.Navigator>
     )
   }
