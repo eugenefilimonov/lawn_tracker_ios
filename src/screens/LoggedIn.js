@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class LoggedIn extends Component {
+import { View, Button } from 'react-native';
+import { userLogout } from '../store/modules/application';
+
+class LoggedIn extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button title='Logout' onPress={this.props.logout} />
+        <Button title='Logout' onPress={this.props.userLogout} />
       </View>
     )
   }
@@ -18,3 +21,9 @@ const styles = {
     alignItems:'center'
   }
 };
+
+const mapDispatchToProps = {
+  userLogout
+};
+
+export default connect(null, mapDispatchToProps)(LoggedIn);

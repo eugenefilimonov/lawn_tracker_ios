@@ -10,7 +10,6 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      error: '',
       loading: false
     };
 
@@ -19,24 +18,20 @@ class Login extends Component {
 
   login() {
     const { email, password } = this.state;
-    this.setState({ error: '', loading: true });
-    axios.post('http://localhost:3000/api/sessions', { email: email, password: password})
-      .then(
-        response => {
-          deviceStorage.saveJWT(response.data.token);
-          this.props.newToken(response.data.token);
-        },
-        error => {
-          this.setState({
-            loading: false,
-            error: 'Invalid email or password'
-          })
-        }
-      );
+
+    this.setState({ 
+      loading: true 
+    });
+
+    this.props.userLogin(email, password).then(() => {
+        this.setState({
+          loading: false
+        })
+    });
   }
 
   render() {
-    const { email, password, error, loading } = this.state;
+    const { email, password, loading } = this.state;
     const { form, section, errorTextStyle } = styles;
 
     return (
@@ -62,7 +57,7 @@ class Login extends Component {
           </View>
 
           <Text style={errorTextStyle}>
-            {error}
+            {this.props.authError}
           </Text>
 
           {!loading ?

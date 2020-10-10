@@ -1,46 +1,24 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {Provider} from 'react-redux';
+import { PersistGate } from 'redux-persist/es/integration/react'
 
-import Auth from './screens/Auth';
-import deviceStorage from './services/deviceStorage';
-import LoggedIn from './screens/LoggedIn';
+import { store, persistor } from './store';
+import Application from './screens';
 
 const Stack = createStackNavigator();
 
-export default class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      jwt: '',
-    }
-
-    this.newToken = this.newToken.bind(this);
-    this.deleteJWT = deviceStorage.deleteJWT.bind(this);
-    this.loadJWT = deviceStorage.loadJWT.bind(this);
-    this.loadJWT();
-  }
-
-  newToken(token) {
-    this.setState({
-      jwt: token
-    });
-  }
-
-  render() {
-    if (this.state.jwt) {
+class App extends Component {
+  render () {
     return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="LoggedIn"
-            component={LoggedIn}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
-    } else {
-      return <Auth newToken={this.newToken} />
-    }
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Application />
+        </PersistGate>
+      </Provider>
+    );
   }
 }
+
+export default App;

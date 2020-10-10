@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import { Text, View } from 'react-native';
 import { Login, Registration } from '../components';
+import { userLogin } from '../store/modules/application';
 
-export default class Auth extends Component {
+class Auth extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -25,7 +28,7 @@ export default class Auth extends Component {
       );
     } else {
       return(
-        <Login newToken={this.props.newToken} authSwitch={this.authSwitch}/>
+        <Login userLogin={this.props.userLogin} authError={this.props.authError} authSwitch={this.authSwitch}/>
       );
     }
   }
@@ -45,4 +48,14 @@ const styles = {
     justifyContent: 'center',
     alignItems:'center'
   }
+}
+
+const mapStateToProps = state => ({
+  authError: state.application.authError
+});
+
+const mapDispatchToProps = {
+  userLogin
 };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
