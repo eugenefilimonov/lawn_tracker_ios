@@ -26,11 +26,8 @@ export const userLogin = (email, password) => {
     return axios.post('http://localhost:3000/api/sessions', { email: email, password: password})
       .then(
         response => {
-          deviceStorage.saveJWT(response.data.token).then(
-            response => {
-              dispatch({ type: USER_VERIFIED, jwt: response.data.token, loading: false })
-            }
-          )
+          deviceStorage.saveJWT(response.data.token)
+          dispatch({ type: USER_VERIFIED, jwt: response.data.token, loading: false })
         },
         error => {
           dispatch({ type: AUTH_ERROR, authError: 'Invalid Email or Password'})
