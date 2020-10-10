@@ -29,7 +29,7 @@ class Application extends Component {
                 />) 
                 :
                 ( <Stack.Screen
-                  name="Authentication"
+                  name="Lawn Tracker"
                   component={Auth}
                 />) 
             }

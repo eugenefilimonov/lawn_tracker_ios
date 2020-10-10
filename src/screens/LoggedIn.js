@@ -1,10 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { View, Button } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, Button, Text } from 'react-native';
 import { fetchProperty } from '../store/modules/property';
 import { userLogout } from '../store/modules/application';
 import SplashScreen from './SplashScreen';
+
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Home!</Text>
+    </View>
+  );
+}
+
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
 
 class LoggedIn extends Component {
   componentDidMount() {
@@ -18,9 +36,10 @@ class LoggedIn extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        <Button title='Logout' onPress={this.props.userLogout} />
-      </View>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
     )
   }
 }
