@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { View, Text } from 'react-native';
 import { Input, TextLink, Button, Loading } from '../../shared';
 import deviceStorage from '../../services/deviceStorage';
@@ -39,6 +39,7 @@ class Registration extends Component {
     const { form, section, errorTextStyle } = styles;
 
     return (
+      <Fragment>
         <View style={form}>
           <View style={section}>
             <Input
@@ -67,8 +68,11 @@ class Registration extends Component {
             </Button>
             :
             <Loading size={'large'} />}
-          <Button onPress={this.props.authSwitch}>Login</Button>
         </View>
+        <TextLink onPress={this.props.authSwitch}>
+          Sign In
+        </TextLink>
+      </Fragment>
     );
   }
 }

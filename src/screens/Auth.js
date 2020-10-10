@@ -9,7 +9,7 @@ class Auth extends Component {
   constructor(props){
     super(props);
     this.state = {
-      showLogin: false
+      showLogin: true
     };
     this.whichForm = this.whichForm.bind(this);
     this.authSwitch = this.authSwitch.bind(this);

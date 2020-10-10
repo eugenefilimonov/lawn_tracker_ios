@@ -24,7 +24,7 @@ class Application extends Component {
           <Stack.Navigator>
             { this.props.token ? 
                 ( <Stack.Screen
-                  name="LoggedIn"
+                  name="My Lawn Tracker"
                   component={LoggedIn}
                 />) 
                 :
