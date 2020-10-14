@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {Provider} from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { store, persistor } from './store';
 import Application from './screens';
@@ -14,7 +15,9 @@ class App extends Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <Application />
+          <SafeAreaProvider>
+            <Application />
+          </SafeAreaProvider>
         </PersistGate>
       </Provider>
     );

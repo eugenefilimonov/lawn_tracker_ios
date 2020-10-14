@@ -35,9 +35,9 @@ export const createUser = (params) => {
   }
 }
 
-export const userLogin = (email, password) => {
+export const userLogin = (params) => {
   return (dispatch)=> {
-    return axios.post('http://localhost:3000/api/sessions', { email: email, password: password})
+    return axios.post('http://localhost:3000/api/sessions', params )
       .then(
         response => {
           deviceStorage.saveJWT(response.data.token)

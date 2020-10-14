@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import Auth from './Auth';
 import LoggedIn from './LoggedIn';
 import SplashScreen from './SplashScreen';
 import { verifyUser }from '../store/modules/application';
+import { SafeAreaView } from 'react-native';
 
-const Stack = createStackNavigator();
 
 class Application extends Component {
   componentDidMount() {
@@ -19,23 +17,7 @@ class Application extends Component {
     if (this.props.loading) {
       return  ( <SplashScreen /> )
     } else {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator>
-            { this.props.token ? 
-                ( <Stack.Screen
-                  name="My Lawn Tracker"
-                  component={LoggedIn}
-                />) 
-                :
-                ( <Stack.Screen
-                  name="Lawn Tracker"
-                  component={Auth}
-                />) 
-            }
-          </Stack.Navigator>
-        </NavigationContainer>
-      )
+      return ( this.props.token ? <LoggedIn /> : <Auth /> )
     }
   }
 }

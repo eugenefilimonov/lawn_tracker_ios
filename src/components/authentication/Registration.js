@@ -1,78 +1,61 @@
 import React, { Component, Fragment } from 'react';
+import { Formik }from 'formik';
 import { View, Text } from 'react-native';
-import { Input, TextLink, Button, Loading } from '../../shared';
+import { Card, Button, Input} from 'react-native-elements';
+import { TextLink, Loading } from '../../shared';
 import deviceStorage from '../../services/deviceStorage';
 import axios from 'axios';
 
 class Registration extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      email: '',
-      password: '',
-      loading: false
-    };
-
     this.createUser = this.createUser.bind(this);
   }
 
 
-  createUser() {
-    this.setState({ loading: true });
-    const { email, password } = this.state;
-    const params = {
-      user: {
-        email: email,
-        password: password
-      }
-    }
-
-    this.props.createUser(params).then(() => {
-        this.setState({
-          loading: false
-        })
-    });
-
+  createUser(values) {
+    this.props.createUser({user: {...values}})
   }
+
   render() {
-    const { email, password, password_confirmation, loading } = this.state;
-    const { form, section, errorTextStyle } = styles;
-
     return (
-      <Fragment>
-        <View style={form}>
-          <View style={section}>
-            <Input
-              placeholder="user@email.com"
-              label="Email"
-              value={email}
-              onChangeText={email => this.setState({ email })}
-            />
-          </View>
-
-          <View style={section}>
-            <Input
-              secureTextEntry
-              placeholder="password"
-              label="Password"
-              value={password}
-              onChangeText={password => this.setState({ password })}
-            />
-          </View>
-          <Text style={errorTextStyle}>
-            {this.props.authError}
-          </Text>
-           {!loading ?
-            <Button onPress={this.createUser}>
-              Register
-            </Button>
-            :
-            <Loading size={'large'} />}
-        </View>
+      <>
+        <Formik 
+          onSubmit={values => this.createUser(values)}
+          initialValues={{ email: '', password: '' }}
+        >
+          {({ values, handleChange, handleSubmit, isValid }) => (
+            <Fragment>
+              <Text
+                style={{
+                  color: 'red'
+                }}
+              >
+                {this.props.authError}
+              </Text>
+              <Input
+                value={values.email}
+                onChangeText={handleChange('email')}
+                placeholder="Email"
+              />
+              <Input
+                value={values.password}
+                onChangeText={handleChange('password')}
+                placeholder="Password"
+                secureTextEntry={true}
+              />
+              <Button 
+                title='Create Account'
+                onPress={handleSubmit}
+                disabled={!isValid}
+              />
+            </Fragment>  
+          )}
+        </Formik>
         <TextLink onPress={this.props.authSwitch}>
           Sign In
         </TextLink>
-      </Fragment>
+      </>
     );
   }
 }

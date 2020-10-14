@@ -1,27 +1,16 @@
 import React, { Component } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
-import { View, Button, Text } from 'react-native';
 import { fetchProperty } from '../store/modules/property';
 import { userLogout } from '../store/modules/application';
 import SplashScreen from './SplashScreen';
+import PayScreenModal from '../components/modal';
+import Dashboard from './Dashboard';
+import Settings from './Setting';
 
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen(props) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Button title='Logout' onPress={props.userLogout} />
-    </View>
-  );
-}
+const PayScreenComponent = () => { return null };
 
 const Tab = createBottomTabNavigator();
 
@@ -31,46 +20,49 @@ class LoggedIn extends Component {
   }
 
   render() {
-    console.log(this.props)
     if (this.props.loading) {
       return <SplashScreen />
     }
-
     return (
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Settings"
-          options={{
-            tabBarLabel: 'Settings',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="cog" color={color} size={size} />
-            ),
-          }}
-        >
-          {() => <SettingsScreen userLogout={this.props.userLogout}/>}
-        </Tab.Screen>
-      </Tab.Navigator>
+        <NavigationContainer>
+          <Tab.Navigator initialRouteName='Settings'>
+            <Tab.Screen
+              name="Dashboard"
+              options={{
+                tabBarLabel: 'Dashboard',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons width={28} height={28} name="view-dashboard" color={color} size={size} />
+                ),
+              }}
+            >
+              {(props) => <Dashboard {...props} /> }
+            </Tab.Screen>
+            <Tab.Screen
+              name="Add"
+              component={PayScreenComponent}
+              options={{
+                tabBarLabel: '',
+                tabBarIcon: () => (
+                  <PayScreenModal />
+                )
+              }}
+            />
+            <Tab.Screen
+              name="Settings"
+              options={{
+                tabBarLabel: 'Settings',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons width={28} height={28} name="cog" color={color} size={size} />
+                ),
+              }}
+            >
+              {(props) => <SettingsScreen {...props} property={this.props.property} userLogout={this.props.userLogout}/>}
+            </Tab.Screen>
+          </Tab.Navigator>
+        </NavigationContainer>
     )
   }
 }
-
-const styles = {
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems:'center'
-  }
-};
 
 const mapStateToProps = state => ({
   loading: state.property.loading,

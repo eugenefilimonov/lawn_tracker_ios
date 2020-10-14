@@ -1,98 +1,62 @@
 import React, { Component, Fragment } from 'react';
+import { Formik }from 'formik';
 import { Text, View } from 'react-native';
-import { Input, TextLink, Loading, Button } from '../../shared';
+import { Card, Button, Input} from 'react-native-elements';
+import { TextLink, Loading } from '../../shared';
 import deviceStorage from '../../services/deviceStorage';
 import axios from 'axios';
 
 class Login extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      email: '',
-      password: '',
-      loading: false
-    };
-
     this.login = this.login.bind(this);
   }
 
-  login() {
-    const { email, password } = this.state;
-
-    this.setState({ 
-      loading: true 
-    });
-
-    this.props.userLogin(email, password).then(() => {
-        this.setState({
-          loading: false
-        })
-    });
+  login(values) {
+    this.props.userLogin(values)
   }
 
   render() {
-    const { email, password, loading } = this.state;
-    const { form, section, errorTextStyle } = styles;
-
     return (
-      <Fragment>
-        <View style={form}>
-          <View style={section}>
-            <Input
-              placeholder="user@email.com"
-              label="Email"
-              value={email}
-              onChangeText={email => this.setState({ email })}
-            />
-          </View>
-
-          <View style={section}>
-            <Input
-              secureTextEntry
-              placeholder="password"
-              label="Password"
-              value={password}
-              onChangeText={password => this.setState({ password })}
-            />
-          </View>
-
-          <Text style={errorTextStyle}>
-            {this.props.authError}
-          </Text>
-
-          {!loading ?
-            <Button onPress={this.login}>
-              Login
-            </Button>
-            :
-            <Loading size={'large'} />}
-
-        </View>
+      <>
+        <Formik 
+          onSubmit={values => this.login(values)}
+          initialValues={{ email: '', password: '' }}
+        >
+          {({ values, handleChange, handleSubmit, isValid }) => (
+            <Fragment>
+              <Text
+                style={{
+                  color: 'red'
+                }}
+              >
+                {this.props.authError}
+              </Text>
+              <Input
+                value={values.email}
+                onChangeText={handleChange('email')}
+                placeholder="Email"
+              />
+              <Input
+                value={values.password}
+                onChangeText={handleChange('password')}
+                placeholder="Password"
+                secureTextEntry={true}
+              />
+              <Button 
+                title='Sign In'
+                onPress={handleSubmit}
+                disabled={!isValid}
+              />
+            </Fragment>  
+          )}
+        </Formik>
         <TextLink onPress={this.props.authSwitch}>
-          Don't have an account? Register!
+          Register
         </TextLink>
-      </Fragment>
+      </>
     );
   }
 }
-
-const styles = {
-  form: {
-    width: '100%',
-    borderTopWidth: 1,
-    borderColor: '#ddd',
-  },
-  section: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
-  },
-  errorTextStyle: {
-    alignSelf: 'center',
-    fontSize: 18,
-    color: 'red'
-  }
-};
 
 export { Login };

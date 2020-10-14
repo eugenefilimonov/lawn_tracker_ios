@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Login, Registration } from '../components';
 import { userLogin, createUser } from '../store/modules/application';
 
@@ -35,9 +34,9 @@ class Auth extends Component {
 
   render() {
     return(
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         {this.whichForm()}
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -46,7 +45,10 @@ const styles = {
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems:'center',
+    margin: 10,
+  },
+  section: {
   }
 }
 
