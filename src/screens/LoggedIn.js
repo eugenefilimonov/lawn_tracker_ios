@@ -3,14 +3,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
-import { fetchProperty } from '../store/modules/property';
+import { fetchPropertyQL, fetchProperty, handleZoneSubmit } from '../store/modules/property';
 import { userLogout } from '../store/modules/application';
 import SplashScreen from './SplashScreen';
-import PayScreenModal from '../components/modal';
+import ActivityModal from '../components/activities';
 import Dashboard from './Dashboard';
-import Settings from './Setting';
+import Settings from '../components/settings';
 
-const PayScreenComponent = () => { return null };
+const BlankComponent = () => { return null };
 
 const Tab = createBottomTabNavigator();
 
@@ -39,11 +39,11 @@ class LoggedIn extends Component {
             </Tab.Screen>
             <Tab.Screen
               name="Add"
-              component={PayScreenComponent}
+              component={BlankComponent}
               options={{
                 tabBarLabel: '',
                 tabBarIcon: () => (
-                  <PayScreenModal />
+                  <ActivityModal />
                 )
               }}
             />
@@ -56,7 +56,7 @@ class LoggedIn extends Component {
                 ),
               }}
             >
-              {(props) => <SettingsScreen {...props} property={this.props.property} userLogout={this.props.userLogout}/>}
+              {(props) => <Settings {...props} {...this.props}/>}
             </Tab.Screen>
           </Tab.Navigator>
         </NavigationContainer>
@@ -66,15 +66,14 @@ class LoggedIn extends Component {
 
 const mapStateToProps = state => ({
   loading: state.property.loading,
-  property: {
-    address: state.property.address,
-    zones: state.property.zones
-  }
+  property: state.property
 });
 
 const mapDispatchToProps = {
   userLogout,
-  fetchProperty
+  fetchProperty,
+  handleZoneSubmit,
+  fetchPropertyQL
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoggedIn);

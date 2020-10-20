@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from "react-native";
 import { Button, Text, Overlay} from 'react-native-elements';
 import { Icon } from 'react-native-elements'
-import { createStackNavigator } from '@react-navigation/stack';
-import { TextLink } from '../shared/TextLinks';
+import { TextLink } from '../../shared/TextLinks';
 
-const Stack = createStackNavigator();
 
-export default PayScreen = () => {
+export default Activity = () => {
   const [visible, setVisible] = useState(false);
 
   const toggleOverlay = () => {
@@ -37,6 +35,7 @@ export default PayScreen = () => {
     </>
   );
 }
+
 const styles = StyleSheet.create({
   overlayContainer: {
     position: 'absolute',
@@ -53,7 +52,8 @@ const styles = StyleSheet.create({
   buttonStyle: {
     minHeight: 250,
     minWidth: '80%',
-    marginBottom: 20
+    marginBottom: 20,
+    borderRadius: 25,
   },
   addButtonStyle: {
     height: 100,
