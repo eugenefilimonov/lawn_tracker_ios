@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
-import { fetchPropertyQL, fetchProperty, handleZoneSubmit } from '../store/modules/property';
+import { fetchProperty, handleZoneSubmit } from '../store/modules/property';
 import { userLogout } from '../store/modules/application';
 import SplashScreen from './SplashScreen';
 import ActivityModal from '../components/activities';
@@ -72,8 +72,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   userLogout,
   fetchProperty,
-  handleZoneSubmit,
-  fetchPropertyQL
+  handleZoneSubmit
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoggedIn);

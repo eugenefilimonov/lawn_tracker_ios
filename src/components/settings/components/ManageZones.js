@@ -16,6 +16,7 @@ export default class ManageZones extends Component {
     }
     this.toggleEditor = this.toggleEditor.bind(this);
     this.showZoneEditor = this.showZoneEditor.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   toggleEditor(zone) {
@@ -25,6 +26,13 @@ export default class ManageZones extends Component {
       })
     }
 
+    this.setState({
+      showEditor: !this.state.showEditor
+    })
+  }
+
+  handleSubmit(values) {
+    this.props.handleZoneSubmit(values);
     this.setState({
       showEditor: !this.state.showEditor
     })
@@ -40,7 +48,7 @@ export default class ManageZones extends Component {
     return (
       <>
       <Formik 
-        onSubmit={values => this.props.handleZoneSubmit(values)}
+        onSubmit={values => this.handleSubmit(values)}
         initialValues={this.state.zone}
       >
         {({ values, handleChange, handleSubmit, isValid }) => (

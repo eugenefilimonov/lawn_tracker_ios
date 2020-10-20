@@ -1,6 +1,23 @@
 import axios from 'axios';
 
 const SET_PROPERTY = 'SET_PROPERTY';
+const SET_ZONES = 'SET_ZONES';
+
+export const handleZoneSubmit = (params) => {
+  return (dispatch, getState) => {
+    axios.post('http://localhost:3000/api/property_zones', params, { headers: {
+      'Authorization': 'Bearer '.concat(getState().application.jwt)
+    }}).then(
+      response => {
+        console.log(response.data);
+        dispatch({type: SET_ZONES, data: response.data.property_zones})
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+}
 
 export const fetchProperty = () => {
   return (dispatch, getState) => {
@@ -32,8 +49,15 @@ const initialState = {
 
 export default reducer = (state = initialState, action) => {
   switch(action.type) {
+    case SET_ZONES: {
+      return {
+        ...state,
+        zones: action.data
+      }
+    }
     case SET_PROPERTY: {
       return {
+        ...state,
         loading: false,
         address: {
           ...state.address,
