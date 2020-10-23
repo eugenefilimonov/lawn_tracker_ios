@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet, View } from 'react-native';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import { Icon } from 'react-native-elements'
 import { fetchProperty, handleZoneSubmit } from '../store/modules/property';
 import { userLogout } from '../store/modules/application';
 import SplashScreen from './SplashScreen';
-import ActivityModal from '../components/activities';
+import Activity from '../components/activities';
 import Dashboard from './Dashboard';
 import Settings from '../components/settings';
-
-const BlankComponent = () => { return null };
 
 const Tab = createBottomTabNavigator();
 
@@ -39,11 +39,27 @@ class LoggedIn extends Component {
             </Tab.Screen>
             <Tab.Screen
               name="Add"
-              component={BlankComponent}
+              component={Activity}
               options={{
                 tabBarLabel: '',
-                tabBarIcon: () => (
-                  <ActivityModal />
+                tabBarIcon: ({ color, size })=> (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      bottom: 0, // space from bottombar
+                      height: 75,
+                      width: 75,
+                      borderRadius: 58,
+                      backgroundColor: '#5a95ff',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Icon 
+                      name="add"
+                      color='#f1f6f9'
+                      size={60}
+                    />
+                  </View>
                 )
               }}
             />
@@ -63,6 +79,18 @@ class LoggedIn extends Component {
     )
   }
 }
+const styles = StyleSheet.create({
+  addButtonStyle: {
+    position: 'absolute',
+    bottom: 20, // space from bottombar
+    height: 100,
+    width: 100,
+    borderRadius: 58,
+    backgroundColor: '#5a95ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+})
 
 const mapStateToProps = state => ({
   loading: state.property.loading,

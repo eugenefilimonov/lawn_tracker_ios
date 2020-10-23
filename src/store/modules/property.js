@@ -63,7 +63,8 @@ export default reducer = (state = initialState, action) => {
           ...state.address,
           ...action.address
         },
-        zones: action.property_zones
+        zones: action.property_zones,
+        weather_history: action.weather_history
       }
     }
     default:

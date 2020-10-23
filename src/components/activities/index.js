@@ -7,30 +7,28 @@ import { TextLink } from '../../shared/TextLinks';
 
 export default Activity = () => {
   const [visible, setVisible] = useState(false);
+  const [activity, setActivity] = useState('start');
 
   const toggleOverlay = () => {
     setVisible(!visible);
+    setActivity('start');
   };
+
+  const toggleActivity = (activity) => {
+    setActivity(activity);
+  }
 
   return (
     <>
-      <Button onPress={toggleOverlay}
-        buttonStyle={styles.addButtonStyle}
-        icon={
-          <Icon name="add-circle-outline" color='white' size={60}/>
-        }
-      />
       <View>
-        <Overlay overlayStyle={styles.overlayContainer} isVisible={visible} onBackdropPress={toggleOverlay}>
-          <View style={styles.content}>
-            <Text h4 style={{marginBottom: 20}}>Add Activity</Text>
-            <Button buttonStyle={styles.buttonStyle} title='Mow' />
-            <Button buttonStyle={styles.buttonStyle} title='Product App' />
-            <TextLink onPress={toggleOverlay}>
-              Cancel
-            </TextLink>
-          </View>
-        </Overlay>
+        <View style={styles.content}>
+          <Text h4 style={{marginBottom: 20}}>Add Activity</Text>
+          <Button onPress={() => setActivity('mow')} buttonStyle={styles.buttonStyle} title='Mow' />
+          <Button onPress={() => setActivity('product')} buttonStyle={styles.buttonStyle} title='Product App' />
+          <TextLink onPress={toggleOverlay}>
+            Cancel
+          </TextLink>
+        </View>
       </View>
     </>
   );
