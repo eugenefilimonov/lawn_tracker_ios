@@ -1,46 +1,40 @@
 import React, { Component } from 'react';
-import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
+import { Dimensions, StatusBar, SafeAreaView, StyleSheet, View} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Dimensions } from "react-native";
-import {
-  LineChart,
-} from "react-native-chart-kit";
-const screenWidth = Dimensions.get("window").width;
+import { Card } from 'react-native-elements';
+import { LineChart } from "react-native-chart-kit";
+import { VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
 const Stack = createStackNavigator();
 
-const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
-  datasets: [
-    {
-      data: [20, 45, 28, 80, 99, 43],
-      color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-      strokeWidth: 2 // optional
-    }
-  ],
-  legend: ["Rainy Days"] // optional
-};
-
-const chartConfig = {
-  backgroundGradientFrom: "#1E2923",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#08130D",
-  backgroundGradientToOpacity: 0.5,
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  strokeWidth: 2, // optional, default 3
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false // optional
-};
-
 export default Dashboard = (props) => {
+  const data = Object.keys(props.property.growth_potential).map((key) => {
+    return {x: key, y: props.property.growth_potential[key]}
+  }).filter((obj) => {
+    if (obj.x === 'id' || obj.x === 'property_id') {
+      return false
+    }
+    return true
+  })
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar />
-      <LineChart
-        data={data}
-        width={screenWidth}
-        height={220}
-        chartConfig={chartConfig}
-      />
+      <View style={{marginTop: 20 }}>
+        <Card containerStyle={{marginBottom: 20}} >
+          <Card.Title>Growth Potential (%)</Card.Title>
+          <Card.Divider/>
+          <VictoryChart
+            theme={VictoryTheme.material}
+          >
+            <VictoryLine
+              style={{
+                data: { stroke: "green" },
+              }}
+              data={data}
+            />
+          </VictoryChart>
+        </Card>
+      </View>
     </SafeAreaView>
   );
 }
@@ -48,7 +42,6 @@ export default Dashboard = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
   },
 });

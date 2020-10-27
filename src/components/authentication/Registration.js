@@ -14,7 +14,9 @@ class Registration extends Component {
 
 
   createUser(values) {
-    this.props.createUser({user: {...values}})
+    const {email, password} = values;
+    const {propertyName, street1, city, state} = values;
+    this.props.createUser({user: {email: email, password: password}, property: {name: propertyName, address: {street1: street1, city: city, state: state}}})
   }
 
   render() {
@@ -22,7 +24,7 @@ class Registration extends Component {
       <>
         <Formik 
           onSubmit={values => this.createUser(values)}
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ email: '', password: '', propertyName: '', street1: '', city: '', state: ''}}
         >
           {({ values, handleChange, handleSubmit, isValid }) => (
             <Fragment>
@@ -33,6 +35,26 @@ class Registration extends Component {
               >
                 {this.props.authError}
               </Text>
+              <Input
+                value={values.propertyName}
+                onChangeText={handleChange('propertyName')}
+                placeholder="Property Name"
+              />
+              <Input
+                value={values.street1}
+                onChangeText={handleChange('street1')}
+                placeholder="Property Street Address"
+              />
+              <Input
+                value={values.city}
+                onChangeText={handleChange('city')}
+                placeholder="Property Street City"
+              />
+              <Input
+                value={values.state}
+                onChangeText={handleChange('state')}
+                placeholder="Property Street State"
+              />
               <Input
                 value={values.email}
                 onChangeText={handleChange('email')}

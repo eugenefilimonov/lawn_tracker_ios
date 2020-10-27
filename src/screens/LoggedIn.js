@@ -35,7 +35,7 @@ class LoggedIn extends Component {
                 ),
               }}
             >
-              {(props) => <Dashboard {...props} /> }
+              {(props) => <Dashboard {...this.props} {...props} /> }
             </Tab.Screen>
             <Tab.Screen
               name="Add"
